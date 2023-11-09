@@ -99,7 +99,16 @@ func (g goBaseAudioContext) CreateBuffer(numChannels, length, sampleRate uint) A
 }
 
 func (g goBaseAudioContext) CreateBufferSource() AudioBufferSourceNode {
-	panic("TODO")
+	jsValue := g.jsValue.Call("createBufferSource")
+	return goAudioBufferSourceNode{
+		goAudioScheduledSourceNode: goAudioScheduledSourceNode{
+			goAudioNode: goAudioNode{
+				goObject: goObject{
+					jsValue: jsValue,
+				},
+			},
+		},
+	}
 }
 
 func (g goBaseAudioContext) CreateConvolver() ConvolverNode {
@@ -147,7 +156,23 @@ func (g goBaseAudioContext) CreateStereoPanner() StereoPannerNode {
 }
 
 func (g goBaseAudioContext) DecodeAudioData(data []byte) Promise[AudioBuffer] {
-	panic("TODO")
+	arrayBuffer := js.Global().Get("ArrayBuffer").New(len(data))
+	uint8Array := js.Global().Get("Uint8Array").New(arrayBuffer)
+	js.CopyBytesToJS(uint8Array, data)
+
+	jsPromise := g.jsValue.Call("decodeAudioData", arrayBuffer)
+	return goPromise[AudioBuffer]{
+		goObject: goObject{
+			jsValue: jsPromise,
+		},
+		convert: func(value js.Value) AudioBuffer {
+			return goAudioBuffer{
+				goObject: goObject{
+					jsValue: value,
+				},
+			}
+		},
+	}
 }
 
 var _ AudioContext = goAudioContext{}
