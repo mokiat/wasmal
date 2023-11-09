@@ -7,3 +7,18 @@ type GainNode interface {
 
 	Gain() AudioParam
 }
+
+var _ GainNode = goGainNode{}
+
+type goGainNode struct {
+	goAudioNode
+}
+
+func (g goGainNode) Gain() AudioParam {
+	jsValue := g.jsValue.Get("gain")
+	return goAudioParam{
+		goObject: goObject{
+			jsValue: jsValue,
+		},
+	}
+}
