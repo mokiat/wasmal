@@ -173,7 +173,14 @@ func (g goBaseAudioContext) CreatePanner() PannerNode {
 }
 
 func (g goBaseAudioContext) CreateStereoPanner() StereoPannerNode {
-	panic("TODO")
+	jsValue := g.jsValue.Call("createStereoPanner")
+	return goStereoPannerNode{
+		goAudioNode: goAudioNode{
+			goObject: goObject{
+				jsValue: jsValue,
+			},
+		},
+	}
 }
 
 func (g goBaseAudioContext) DecodeAudioData(data []byte) Promise[AudioBuffer] {
