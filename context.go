@@ -112,7 +112,14 @@ func (g goBaseAudioContext) CreateBufferSource() AudioBufferSourceNode {
 }
 
 func (g goBaseAudioContext) CreateConvolver() ConvolverNode {
-	panic("TODO")
+	jsValue := g.jsValue.Call("createConvolver")
+	return goConvolverNode{
+		goAudioNode: goAudioNode{
+			goObject: goObject{
+				jsValue: jsValue,
+			},
+		},
+	}
 }
 
 func (g goBaseAudioContext) CreateDelay() DelayNode {
