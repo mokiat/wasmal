@@ -225,13 +225,37 @@ func (g goAudioContext) OutputLatency() float64 {
 }
 
 func (g goAudioContext) Close() Promise[struct{}] {
-	panic("TODO")
+	jsPromise := g.jsValue.Call("close")
+	return goPromise[struct{}]{
+		goObject: goObject{
+			jsValue: jsPromise,
+		},
+		convert: func(value js.Value) struct{} {
+			return struct{}{}
+		},
+	}
 }
 
 func (g goAudioContext) Resume() Promise[struct{}] {
-	panic("TODO")
+	jsPromise := g.jsValue.Call("resume")
+	return goPromise[struct{}]{
+		goObject: goObject{
+			jsValue: jsPromise,
+		},
+		convert: func(value js.Value) struct{} {
+			return struct{}{}
+		},
+	}
 }
 
 func (g goAudioContext) Suspend() Promise[struct{}] {
-	panic("TODO")
+	jsPromise := g.jsValue.Call("suspend")
+	return goPromise[struct{}]{
+		goObject: goObject{
+			jsValue: jsPromise,
+		},
+		convert: func(value js.Value) struct{} {
+			return struct{}{}
+		},
+	}
 }
