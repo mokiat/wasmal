@@ -123,7 +123,14 @@ func (g goBaseAudioContext) CreateConvolver() ConvolverNode {
 }
 
 func (g goBaseAudioContext) CreateDelay() DelayNode {
-	panic("TODO")
+	jsValue := g.jsValue.Call("createDelay")
+	return goDelayNode{
+		goAudioNode: goAudioNode{
+			goObject: goObject{
+				jsValue: jsValue,
+			},
+		},
+	}
 }
 
 func (g goBaseAudioContext) CreateDynamicsCompressor() DynamicsCompressorNode {
