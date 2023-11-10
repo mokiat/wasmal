@@ -83,7 +83,12 @@ func (g goBaseAudioContext) Destination() AudioDestinationNode {
 }
 
 func (g goBaseAudioContext) Listener() AudioListener {
-	panic("TODO")
+	jsValue := g.jsValue.Get("listener")
+	return goAudioListener{
+		goObject: goObject{
+			jsValue: jsValue,
+		},
+	}
 }
 
 func (g goBaseAudioContext) SampleRate() float64 {

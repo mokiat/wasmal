@@ -9,9 +9,6 @@ type Promise[T any] interface {
 	Catch(cb func(err error)) Promise[T]
 }
 
-type Float32Array interface {
-}
-
 var _ Promise[struct{}] = goPromise[struct{}]{}
 
 type goPromise[T any] struct {
