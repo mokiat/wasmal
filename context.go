@@ -120,7 +120,14 @@ func (g goBaseAudioContext) CreateDelay() DelayNode {
 }
 
 func (g goBaseAudioContext) CreateDynamicsCompressor() DynamicsCompressorNode {
-	panic("TODO")
+	jsValue := g.jsValue.Call("createDynamicsCompressor")
+	return goDynamicsCompressorNode{
+		goAudioNode: goAudioNode{
+			goObject: goObject{
+				jsValue: jsValue,
+			},
+		},
+	}
 }
 
 func (g goBaseAudioContext) CreateGain() GainNode {
