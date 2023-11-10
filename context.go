@@ -169,7 +169,14 @@ func (g goBaseAudioContext) CreateOscillator() OscillatorNode {
 }
 
 func (g goBaseAudioContext) CreatePanner() PannerNode {
-	panic("TODO")
+	jsValue := g.jsValue.Call("createPanner")
+	return goPannerNode{
+		goAudioNode: goAudioNode{
+			goObject: goObject{
+				jsValue: jsValue,
+			},
+		},
+	}
 }
 
 func (g goBaseAudioContext) CreateStereoPanner() StereoPannerNode {
