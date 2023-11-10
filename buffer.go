@@ -80,37 +80,53 @@ func (g goAudioBufferSourceNode) SetBuffer(buffer AudioBuffer) {
 }
 
 func (g goAudioBufferSourceNode) Detune() AudioParam {
-	panic("TODO")
+	jsValue := g.jsValue.Get("detune")
+	return goAudioParam{
+		goObject: goObject{
+			jsValue: jsValue,
+		},
+	}
 }
 
 func (g goAudioBufferSourceNode) Loop() bool {
-	panic("TODO")
+	return g.jsValue.Get("loop").Bool()
 }
 
 func (g goAudioBufferSourceNode) SetLoop(loop bool) {
-	panic("TODO")
+	g.jsValue.Set("loop", loop)
 }
 
 func (g goAudioBufferSourceNode) LoopStart() float64 {
-	panic("TODO")
+	return g.jsValue.Get("loopStart").Float()
 }
 
 func (g goAudioBufferSourceNode) SetLoopStart(start float64) {
-	panic("TODO")
+	g.jsValue.Set("loopStart", start)
 }
 
 func (g goAudioBufferSourceNode) LoopEnd() float64 {
-	panic("TODO")
+	return g.jsValue.Get("loopEnd").Float()
 }
 
 func (g goAudioBufferSourceNode) SetLoopEnd(end float64) {
-	panic("TODO")
+	g.jsValue.Set("loopEnd", end)
 }
 
 func (g goAudioBufferSourceNode) PlaybackRate() AudioParam {
-	panic("TODO")
+	jsValue := g.jsValue.Get("playbackRate")
+	return goAudioParam{
+		goObject: goObject{
+			jsValue: jsValue,
+		},
+	}
 }
 
 func (g goAudioBufferSourceNode) StartDetailed(when, offset float64, duration opt.T[float64]) {
-	panic("TODO")
+	params := make([]any, 3)
+	params[0] = when
+	params[1] = offset
+	if duration.Specified {
+		params[2] = duration.Value
+	}
+	g.jsValue.Call("start", params...)
 }
