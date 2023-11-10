@@ -95,7 +95,12 @@ func (g goBaseAudioContext) State() AudioContextState {
 }
 
 func (g goBaseAudioContext) CreateBuffer(numChannels, length, sampleRate uint) AudioBuffer {
-	panic("TODO")
+	jsValue := g.jsValue.Call("createBuffer", int(numChannels), int(length), int(sampleRate))
+	return goAudioBuffer{
+		goObject: goObject{
+			jsValue: jsValue,
+		},
+	}
 }
 
 func (g goBaseAudioContext) CreateBufferSource() AudioBufferSourceNode {

@@ -12,7 +12,8 @@ type AudioBuffer interface {
 	Duration() float64
 	NumberOfChannels() uint
 
-	GetChannelData(channel uint) Float32Array
+	// TODO:
+	// GetChannelData(channel uint) Float32Arra
 }
 
 // AudioBufferSourceNode as described here:
@@ -54,10 +55,6 @@ func (g goAudioBuffer) Duration() float64 {
 
 func (g goAudioBuffer) NumberOfChannels() uint {
 	return uint(g.jsValue.Get("numberOfChannels").Int())
-}
-
-func (g goAudioBuffer) GetChannelData(channel uint) Float32Array {
-	panic("TODO")
 }
 
 var _ AudioBufferSourceNode = goAudioBufferSourceNode{}
