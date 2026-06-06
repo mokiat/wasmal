@@ -25,7 +25,7 @@ type OscillatorType string
 const (
 	OscillatorTypeSine     OscillatorType = "sine"
 	OscillatorTypeSquare   OscillatorType = "square"
-	OscillatorTypeSawTooth OscillatorType = "sawtooth"
+	OscillatorTypeSawtooth OscillatorType = "sawtooth"
 	OscillatorTypeTriangle OscillatorType = "triangle"
 	OscillatorTypeCustom   OscillatorType = "custom"
 )

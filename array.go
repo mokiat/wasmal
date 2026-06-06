@@ -14,11 +14,11 @@ type goFloat32Array struct {
 }
 
 // Get returns the value at the given index.
-func (g goFloat32Array) Get(index int) float32 {
+func (g *goFloat32Array) Get(index int) float32 {
 	return float32(g.jsValue.Index(index).Float())
 }
 
 // Set sets the value at the given index.
-func (g goFloat32Array) Set(index int, value float32) {
+func (g *goFloat32Array) Set(index int, value float32) {
 	g.jsValue.SetIndex(index, value)
 }

@@ -41,7 +41,7 @@ type BaseAudioContext interface {
 
 	// CreateDelay creates a DelayNode, which can be used to delay the incoming
 	// audio signal by a certain amount of time.
-	CreateDelay() DelayNode
+	CreateDelay(maxDelayTime float64) DelayNode
 
 	// CreateDynamicsCompressor creates a DynamicsCompressorNode, which can be used
 	// to apply dynamic range compression to the audio signal.
@@ -176,8 +176,8 @@ func (g *goBaseAudioContext) CreateConvolver() ConvolverNode {
 	}
 }
 
-func (g *goBaseAudioContext) CreateDelay() DelayNode {
-	jsValue := g.jsValue.Call("createDelay")
+func (g *goBaseAudioContext) CreateDelay(maxDelayTime float64) DelayNode {
+	jsValue := g.jsValue.Call("createDelay", maxDelayTime)
 	return &goDelayNode{
 		goAudioNode: goAudioNode{
 			goObject: goObject{

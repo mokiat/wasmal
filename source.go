@@ -20,10 +20,9 @@ type AudioScheduledSourceNode interface {
 	// SetOnEnded sets a callback that will be called when the audio source has finished playing.
 	//
 	// The returned CleanupFunc is not per spec but is needed due to the way Go's js.Func works.
-	// It should be called when the callback is no longer needed to release resources.
-	// It is important that the callback is not called after it has been released. You may want
-	// to call SetOnEnded with a nil callback to ensure that the callback is not called after it
-	// has been released.
+	// It should be called when the callback is no longer needed to release resources. Each
+	// invocation of SetOnEnded will replace the previous callback, so you should call the returned
+	// CleanupFunc before calling SetOnEnded again to avoid leaking resources.
 	SetOnEnded(onEnded func()) CleanupFunc
 }
 
@@ -91,11 +90,17 @@ func (g *goAudioScheduledSourceNode) Stop(when float64) {
 }
 
 func (g *goAudioScheduledSourceNode) SetOnEnded(cb func()) CleanupFunc {
+	if cb == nil {
+		g.jsValue.Set("onended", js.Null())
+		return func() {}
+	}
+
 	onEnded := js.FuncOf(func(this js.Value, args []js.Value) any {
 		cb()
 		return nil
 	})
 	g.jsValue.Set("onended", onEnded)
+
 	return onEnded.Release
 }
 

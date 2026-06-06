@@ -87,8 +87,8 @@ func (g *goAudioParam) SetTargetAtTime(target float32, startTime float64, timeCo
 	g.jsValue.Call("setTargetAtTime", target, startTime, timeConstant)
 }
 
-func (g *goAudioParam) CancelScheduledValues(startTime float64) {
-	g.jsValue.Call("cancelScheduledValues", startTime)
+func (g *goAudioParam) CancelScheduledValues(cancelTime float64) {
+	g.jsValue.Call("cancelScheduledValues", cancelTime)
 }
 
 func (g *goAudioParam) CancelAndHoldAtTime(cancelTime float64) {
