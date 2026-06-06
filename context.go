@@ -27,6 +27,10 @@ type BaseAudioContext interface {
 	// State returns the current state of the audio context.
 	State() AudioContextState
 
+	// CreateBiquadFilter creates a BiquadFilterNode, which can be used to apply a
+	// biquad filter effect to the audio signal.
+	CreateBiquadFilter() BiquadFilterNode
+
 	// CreateBuffer creates an empty AudioBuffer with the specified number of
 	// channels, length in sample-frames, and sample rate.
 	CreateBuffer(numChannels, length uint32, sampleRate float32) AudioBuffer
@@ -141,6 +145,17 @@ func (g *goBaseAudioContext) Listener() AudioListener {
 
 func (g *goBaseAudioContext) State() AudioContextState {
 	return AudioContextState(g.jsValue.Get("state").String())
+}
+
+func (g *goBaseAudioContext) CreateBiquadFilter() BiquadFilterNode {
+	jsValue := g.jsValue.Call("createBiquadFilter")
+	return &goBiquadFilterNode{
+		goAudioNode: goAudioNode{
+			goObject: goObject{
+				jsValue: jsValue,
+			},
+		},
+	}
 }
 
 func (g *goBaseAudioContext) CreateBuffer(numChannels, length uint32, sampleRate float32) AudioBuffer {
