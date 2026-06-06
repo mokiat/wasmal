@@ -80,8 +80,6 @@ var _ AudioScheduledSourceNode = (*goAudioScheduledSourceNode)(nil)
 
 type goAudioScheduledSourceNode struct {
 	goAudioNode
-
-	onEnded js.Func
 }
 
 func (g *goAudioScheduledSourceNode) Start(when float64) {
