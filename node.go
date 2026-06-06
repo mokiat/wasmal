@@ -1,7 +1,7 @@
 package wasmal
 
 // AudioNode as described here:
-// https://developer.mozilla.org/en-US/docs/Web/API/AudioNode
+// https://www.w3.org/TR/webaudio-1.1/#AudioNode
 type AudioNode interface {
 	object
 

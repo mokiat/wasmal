@@ -3,7 +3,7 @@ package wasmal
 import "syscall/js"
 
 // AudioScheduledSourceNode as described here:
-// https://developer.mozilla.org/en-US/docs/Web/API/AudioScheduledSourceNode
+// https://www.w3.org/TR/webaudio-1.1/#AudioScheduledSourceNode
 type AudioScheduledSourceNode interface {
 	AudioNode
 
@@ -28,7 +28,7 @@ type AudioScheduledSourceNode interface {
 }
 
 // AudioBufferSourceNode as described here:
-// https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode
+// https://www.w3.org/TR/webaudio-1.1/#AudioBufferSourceNode
 type AudioBufferSourceNode interface {
 	AudioScheduledSourceNode
 

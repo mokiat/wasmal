@@ -1,7 +1,7 @@
 package wasmal
 
 // AudioBuffer as described here:
-// https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer
+// https://www.w3.org/TR/webaudio-1.1/#AudioBuffer
 type AudioBuffer interface {
 	object
 

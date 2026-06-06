@@ -112,7 +112,7 @@ const (
 )
 
 // StereoPannerNode as described here:
-// https://developer.mozilla.org/en-US/docs/Web/API/StereoPannerNode
+// https://www.w3.org/TR/webaudio-1.1/#stereopannernode
 type StereoPannerNode interface {
 	AudioNode
 

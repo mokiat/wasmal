@@ -1,7 +1,7 @@
 package wasmal
 
 // AudioParam as described here:
-// https://developer.mozilla.org/en-US/docs/Web/API/AudioParam
+// https://www.w3.org/TR/webaudio-1.1/#AudioParam
 type AudioParam interface {
 	object
 

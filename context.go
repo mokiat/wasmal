@@ -5,7 +5,7 @@ import "syscall/js"
 const DefaultSampleRate = 44100
 
 // BaseAudioContext as described here:
-// https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext
+// https://www.w3.org/TR/webaudio-1.1/#BaseAudioContext
 type BaseAudioContext interface {
 	object
 
@@ -15,7 +15,7 @@ type BaseAudioContext interface {
 	SampleRate() float64
 	State() AudioContextState
 
-	CreateBuffer(numChannels, length, sampleRate uint) AudioBuffer
+	CreateBuffer(numChannels, length uint32, sampleRate float32) AudioBuffer
 	CreateBufferSource() AudioBufferSourceNode
 	CreateConvolver() ConvolverNode
 	CreateDelay() DelayNode
@@ -28,7 +28,7 @@ type BaseAudioContext interface {
 }
 
 // AudioContextState as described here:
-// https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/state
+// https://www.w3.org/TR/webaudio-1.1/#enumdef-audiocontextstate
 type AudioContextState string
 
 const (
@@ -38,7 +38,7 @@ const (
 )
 
 // AudioContext as described here:
-// https://developer.mozilla.org/en-US/docs/Web/API/AudioContext
+// https://www.w3.org/TR/webaudio-1.1/#AudioContext
 type AudioContext interface {
 	BaseAudioContext
 
@@ -99,9 +99,9 @@ func (g goBaseAudioContext) State() AudioContextState {
 	return AudioContextState(g.jsValue.Get("state").String())
 }
 
-func (g goBaseAudioContext) CreateBuffer(numChannels, length, sampleRate uint) AudioBuffer {
-	jsValue := g.jsValue.Call("createBuffer", int(numChannels), int(length), int(sampleRate))
-	return goAudioBuffer{
+func (g goBaseAudioContext) CreateBuffer(numChannels, length uint32, sampleRate float32) AudioBuffer {
+	jsValue := g.jsValue.Call("createBuffer", numChannels, length, sampleRate)
+	return &goAudioBuffer{
 		goObject: goObject{
 			jsValue: jsValue,
 		},

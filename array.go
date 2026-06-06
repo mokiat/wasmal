@@ -1,7 +1,7 @@
 package wasmal
 
 // Float32Array as described here:
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array
+// https://webidl.spec.whatwg.org/#idl-Float32Array
 type Float32Array interface {
 	Get(index int) float32
 	Set(index int, value float32)
