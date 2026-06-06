@@ -46,10 +46,12 @@ const (
 // https://developer.mozilla.org/en-US/docs/Web/API/StereoPannerNode
 type StereoPannerNode interface {
 	AudioNode
+
+	// Pan returns an AudioParam representing the left-to-right pan control.
 	Pan() AudioParam
 }
 
-var _ PannerNode = goPannerNode{}
+var _ PannerNode = (*goPannerNode)(nil)
 
 type goPannerNode struct {
 	goAudioNode
@@ -165,15 +167,15 @@ func (g goPannerNode) SetRolloffFactor(factor float64) {
 	g.jsValue.Set("rolloffFactor", factor)
 }
 
-var _ StereoPannerNode = goStereoPannerNode{}
+var _ StereoPannerNode = (*goStereoPannerNode)(nil)
 
 type goStereoPannerNode struct {
 	goAudioNode
 }
 
-func (g goStereoPannerNode) Pan() AudioParam {
+func (g *goStereoPannerNode) Pan() AudioParam {
 	jsValue := g.jsValue.Get("pan")
-	return goAudioParam{
+	return &goAudioParam{
 		goObject: goObject{
 			jsValue: jsValue,
 		},
