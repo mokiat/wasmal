@@ -32,18 +32,47 @@ type AudioScheduledSourceNode interface {
 type AudioBufferSourceNode interface {
 	AudioScheduledSourceNode
 
+	// Buffer returns the AudioBuffer that is being used as the source of the audio data.
 	Buffer() AudioBuffer
+
+	// SetBuffer sets the AudioBuffer that is being used as the source of the audio data.
 	SetBuffer(buffer AudioBuffer)
-	Detune() AudioParam
-	Loop() bool
-	SetLoop(loop bool)
-	LoopStart() float64
-	SetLoopStart(start float64)
-	LoopEnd() float64
-	SetLoopEnd(end float64)
+
+	// PlaybackRate returns an AudioParam that controls the rate at which the audio is played back.
 	PlaybackRate() AudioParam
 
+	// Detune returns an AudioParam that controls the detuning of the audio source in cents.
+	Detune() AudioParam
+
+	// Loop returns a boolean indicating whether the audio source should loop within
+	// [AudioBufferSourceNode.LoopStart] and [AudioBufferSourceNode.LoopEnd].
+	Loop() bool
+
+	// SetLoop sets a boolean indicating whether the audio source should loop.
+	SetLoop(loop bool)
+
+	// LoopStart returns the time in seconds within the audio buffer at which the
+	// loop should start.
+	LoopStart() float64
+
+	// SetLoopStart sets the time in seconds within the audio buffer at which the
+	// loop should start.
+	SetLoopStart(start float64)
+
+	// LoopEnd returns the time in seconds within the audio buffer at which the
+	// loop should end.
+	LoopEnd() float64
+
+	// SetLoopEnd sets the time in seconds within the audio buffer at which the
+	// loop should end.
+	SetLoopEnd(end float64)
+
+	// StartOffset starts playback of the audio source at the specified time and
+	// with the specified offset.
 	StartOffset(when, offset float64)
+
+	// StartOffsetDuration starts playback of the audio source at the specified
+	// time, with the specified offset and duration.
 	StartOffsetDuration(when, offset, duration float64)
 }
 
@@ -78,7 +107,7 @@ type goAudioBufferSourceNode struct {
 	goAudioScheduledSourceNode
 }
 
-func (g goAudioBufferSourceNode) Buffer() AudioBuffer {
+func (g *goAudioBufferSourceNode) Buffer() AudioBuffer {
 	jsValue := g.jsValue.Get("buffer")
 	return &goAudioBuffer{
 		goObject: goObject{
@@ -87,56 +116,56 @@ func (g goAudioBufferSourceNode) Buffer() AudioBuffer {
 	}
 }
 
-func (g goAudioBufferSourceNode) SetBuffer(buffer AudioBuffer) {
+func (g *goAudioBufferSourceNode) SetBuffer(buffer AudioBuffer) {
 	g.jsValue.Set("buffer", buffer.ref())
 }
 
-func (g goAudioBufferSourceNode) Detune() AudioParam {
-	jsValue := g.jsValue.Get("detune")
-	return goAudioParam{
+func (g *goAudioBufferSourceNode) PlaybackRate() AudioParam {
+	jsValue := g.jsValue.Get("playbackRate")
+	return &goAudioParam{
 		goObject: goObject{
 			jsValue: jsValue,
 		},
 	}
 }
 
-func (g goAudioBufferSourceNode) Loop() bool {
+func (g *goAudioBufferSourceNode) Detune() AudioParam {
+	jsValue := g.jsValue.Get("detune")
+	return &goAudioParam{
+		goObject: goObject{
+			jsValue: jsValue,
+		},
+	}
+}
+
+func (g *goAudioBufferSourceNode) Loop() bool {
 	return g.jsValue.Get("loop").Bool()
 }
 
-func (g goAudioBufferSourceNode) SetLoop(loop bool) {
+func (g *goAudioBufferSourceNode) SetLoop(loop bool) {
 	g.jsValue.Set("loop", loop)
 }
 
-func (g goAudioBufferSourceNode) LoopStart() float64 {
+func (g *goAudioBufferSourceNode) LoopStart() float64 {
 	return g.jsValue.Get("loopStart").Float()
 }
 
-func (g goAudioBufferSourceNode) SetLoopStart(start float64) {
+func (g *goAudioBufferSourceNode) SetLoopStart(start float64) {
 	g.jsValue.Set("loopStart", start)
 }
 
-func (g goAudioBufferSourceNode) LoopEnd() float64 {
+func (g *goAudioBufferSourceNode) LoopEnd() float64 {
 	return g.jsValue.Get("loopEnd").Float()
 }
 
-func (g goAudioBufferSourceNode) SetLoopEnd(end float64) {
+func (g *goAudioBufferSourceNode) SetLoopEnd(end float64) {
 	g.jsValue.Set("loopEnd", end)
 }
 
-func (g goAudioBufferSourceNode) PlaybackRate() AudioParam {
-	jsValue := g.jsValue.Get("playbackRate")
-	return goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
-	}
-}
-
-func (g goAudioBufferSourceNode) StartOffset(when, offset float64) {
+func (g *goAudioBufferSourceNode) StartOffset(when, offset float64) {
 	g.jsValue.Call("start", when, offset)
 }
 
-func (g goAudioBufferSourceNode) StartOffsetDuration(when, offset, duration float64) {
+func (g *goAudioBufferSourceNode) StartOffsetDuration(when, offset, duration float64) {
 	g.jsValue.Call("start", when, offset, duration)
 }
