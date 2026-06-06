@@ -38,7 +38,7 @@ func (g *goPromise[T]) Then(cb func(value T)) CleanupFunc {
 		cb(g.convert(args[0]))
 		return nil
 	})
-	g.jsValue.Call("then", jsFunc)
+	g.jsValue.Call("then", jsFunc, noopCallback)
 	return jsFunc.Release
 }
 
@@ -52,3 +52,7 @@ func (g *goPromise[T]) Catch(cb func(err error)) CleanupFunc {
 	g.jsValue.Call("catch", jsFunc)
 	return jsFunc.Release
 }
+
+var noopCallback = js.FuncOf(func(this js.Value, args []js.Value) any {
+	return nil
+})
