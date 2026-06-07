@@ -1,129 +1,53 @@
 package wasmal
 
-import "github.com/mokiat/gog/opt"
-
 // AudioBuffer as described here:
-// https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer
+// https://www.w3.org/TR/webaudio-1.1/#AudioBuffer
 type AudioBuffer interface {
 	object
 
-	SampleRate() float64
-	Length() uint
+	// SampleRate is the sample rate of the PCM audio data in the buffer, in samples per second.
+	SampleRate() float32
+
+	// Length is the length of the PCM audio data in the buffer, in sample-frames.
+	Length() uint32
+
+	// Duration is the duration of the PCM audio data in the buffer, in seconds.
 	Duration() float64
-	NumberOfChannels() uint
 
-	// TODO:
-	// GetChannelData(channel uint) Float32Arra
+	// NumberOfChannels is the number of discrete audio channels described by the buffer.
+	NumberOfChannels() uint32
+
+	// GetChannelData returns a Float32Array containing the PCM audio data associated with the specified channel.
+	GetChannelData(channel uint32) Float32Array
 }
 
-// AudioBufferSourceNode as described here:
-// https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode
-type AudioBufferSourceNode interface {
-	AudioScheduledSourceNode
-
-	Buffer() AudioBuffer
-	SetBuffer(buffer AudioBuffer)
-	Detune() AudioParam
-	Loop() bool
-	SetLoop(loop bool)
-	LoopStart() float64
-	SetLoopStart(start float64)
-	LoopEnd() float64
-	SetLoopEnd(end float64)
-	PlaybackRate() AudioParam
-
-	StartDetailed(when, offset float64, duration opt.T[float64])
-}
-
-var _ AudioBuffer = goAudioBuffer{}
+var _ AudioBuffer = (*goAudioBuffer)(nil)
 
 type goAudioBuffer struct {
 	goObject
 }
 
-func (g goAudioBuffer) SampleRate() float64 {
-	return g.jsValue.Get("sampleRate").Float()
+func (g *goAudioBuffer) SampleRate() float32 {
+	return float32(g.jsValue.Get("sampleRate").Float())
 }
 
-func (g goAudioBuffer) Length() uint {
-	return uint(g.jsValue.Get("length").Int())
+func (g *goAudioBuffer) Length() uint32 {
+	return uint32(g.jsValue.Get("length").Int())
 }
 
-func (g goAudioBuffer) Duration() float64 {
+func (g *goAudioBuffer) Duration() float64 {
 	return g.jsValue.Get("duration").Float()
 }
 
-func (g goAudioBuffer) NumberOfChannels() uint {
-	return uint(g.jsValue.Get("numberOfChannels").Int())
+func (g *goAudioBuffer) NumberOfChannels() uint32 {
+	return uint32(g.jsValue.Get("numberOfChannels").Int())
 }
 
-var _ AudioBufferSourceNode = goAudioBufferSourceNode{}
-
-type goAudioBufferSourceNode struct {
-	goAudioScheduledSourceNode
-}
-
-func (g goAudioBufferSourceNode) Buffer() AudioBuffer {
-	jsValue := g.jsValue.Get("buffer")
-	return goAudioBuffer{
+func (g *goAudioBuffer) GetChannelData(channel uint32) Float32Array {
+	jsValue := g.jsValue.Call("getChannelData", channel)
+	return &goFloat32Array{
 		goObject: goObject{
 			jsValue: jsValue,
 		},
 	}
-}
-
-func (g goAudioBufferSourceNode) SetBuffer(buffer AudioBuffer) {
-	g.jsValue.Set("buffer", buffer.ref())
-}
-
-func (g goAudioBufferSourceNode) Detune() AudioParam {
-	jsValue := g.jsValue.Get("detune")
-	return goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
-	}
-}
-
-func (g goAudioBufferSourceNode) Loop() bool {
-	return g.jsValue.Get("loop").Bool()
-}
-
-func (g goAudioBufferSourceNode) SetLoop(loop bool) {
-	g.jsValue.Set("loop", loop)
-}
-
-func (g goAudioBufferSourceNode) LoopStart() float64 {
-	return g.jsValue.Get("loopStart").Float()
-}
-
-func (g goAudioBufferSourceNode) SetLoopStart(start float64) {
-	g.jsValue.Set("loopStart", start)
-}
-
-func (g goAudioBufferSourceNode) LoopEnd() float64 {
-	return g.jsValue.Get("loopEnd").Float()
-}
-
-func (g goAudioBufferSourceNode) SetLoopEnd(end float64) {
-	g.jsValue.Set("loopEnd", end)
-}
-
-func (g goAudioBufferSourceNode) PlaybackRate() AudioParam {
-	jsValue := g.jsValue.Get("playbackRate")
-	return goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
-	}
-}
-
-func (g goAudioBufferSourceNode) StartDetailed(when, offset float64, duration opt.T[float64]) {
-	params := make([]any, 3)
-	params[0] = when
-	params[1] = offset
-	if duration.Specified {
-		params[2] = duration.Value
-	}
-	g.jsValue.Call("start", params...)
 }
