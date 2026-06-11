@@ -33,7 +33,7 @@ func (g *goFloat32Array) CopyFrom(data []float32) {
 	uint8View := js.Global().Get("Uint8Array").New(
 		g.jsValue.Get("buffer"),
 		g.jsValue.Get("byteOffset"),
-		len(data)*4,
+		g.jsValue.Get("byteLength"),
 	)
 	byteData := asByteSlice(data)
 	js.CopyBytesToJS(uint8View, byteData)
