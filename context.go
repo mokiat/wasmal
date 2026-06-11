@@ -55,6 +55,10 @@ type BaseAudioContext interface {
 	// audio signal.
 	CreateGain() GainNode
 
+	// CreateIIRFilter creates an IIRFilterNode, which can be used to apply an
+	// infinite impulse response (IIR) filter effect to the audio signal.
+	CreateIIRFilter(feedforward, feedback []float64) IIRFilterNode
+
 	// CreateOscillator creates an OscillatorNode, which can be used to generate
 	// periodic waveforms such as sine, square, sawtooth, and triangle waves.
 	CreateOscillator() OscillatorNode
@@ -216,6 +220,27 @@ func (g *goBaseAudioContext) CreateDynamicsCompressor() DynamicsCompressorNode {
 func (g *goBaseAudioContext) CreateGain() GainNode {
 	jsValue := g.jsValue.Call("createGain")
 	return &goGainNode{
+		goAudioNode: goAudioNode{
+			goObject: goObject{
+				jsValue: jsValue,
+			},
+		},
+	}
+}
+
+func (g *goBaseAudioContext) CreateIIRFilter(feedforward, feedback []float64) IIRFilterNode {
+	jsFeedforward := js.Global().Get("Array").New(len(feedforward))
+	for i, s := range feedforward {
+		jsFeedforward.SetIndex(i, s)
+	}
+
+	jsFeedback := js.Global().Get("Array").New(len(feedback))
+	for i, s := range feedback {
+		jsFeedback.SetIndex(i, s)
+	}
+
+	jsValue := g.jsValue.Call("createIIRFilter", jsFeedforward, jsFeedback)
+	return &goIIRFilterNode{
 		goAudioNode: goAudioNode{
 			goObject: goObject{
 				jsValue: jsValue,
