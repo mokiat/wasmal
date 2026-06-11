@@ -15,6 +15,9 @@ type Promise[T any] interface {
 	// Then registers a callback to be called when the Promise is resolved with
 	// a value of type T.
 	//
+	// If the Promise is rejected, the callback is not invoked and the rejection
+	// is silently discarded. Register a callback through Catch to observe errors.
+	//
 	// The returned CleanupFunc must be called to release resources associated
 	// with the callback, regardless of whether the Promise is resolved or rejected.
 	Then(cb func(value T)) CleanupFunc

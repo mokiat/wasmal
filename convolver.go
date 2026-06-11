@@ -30,6 +30,9 @@ type goConvolverNode struct {
 
 func (g *goConvolverNode) Buffer() AudioBuffer {
 	jsValue := g.jsValue.Get("buffer")
+	if jsValue.IsNull() {
+		return nil
+	}
 	return &goAudioBuffer{
 		goObject: goObject{
 			jsValue: jsValue,
