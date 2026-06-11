@@ -2,8 +2,6 @@ package wasmal
 
 import "syscall/js"
 
-const DefaultSampleRate = 44100
-
 // BaseAudioContext as described here:
 // https://www.w3.org/TR/webaudio-1.1/#BaseAudioContext
 type BaseAudioContext interface {
