@@ -112,6 +112,9 @@ type goAudioBufferSourceNode struct {
 
 func (g *goAudioBufferSourceNode) Buffer() AudioBuffer {
 	jsValue := g.jsValue.Get("buffer")
+	if jsValue.IsNull() {
+		return nil
+	}
 	return &goAudioBuffer{
 		goObject: goObject{
 			jsValue: jsValue,
