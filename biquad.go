@@ -56,35 +56,27 @@ func (g *goBiquadFilterNode) SetType(typ BiquadFilterType) {
 func (g *goBiquadFilterNode) Frequency() AudioParam {
 	jsValue := g.jsValue.Get("frequency")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goBiquadFilterNode) Detune() AudioParam {
 	jsValue := g.jsValue.Get("detune")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goBiquadFilterNode) Q() AudioParam {
 	jsValue := g.jsValue.Get("Q")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goBiquadFilterNode) Gain() AudioParam {
 	jsValue := g.jsValue.Get("gain")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }

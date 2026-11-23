@@ -46,8 +46,6 @@ func (g *goAudioBuffer) NumberOfChannels() uint32 {
 func (g *goAudioBuffer) GetChannelData(channel uint32) Float32Array {
 	jsValue := g.jsValue.Call("getChannelData", channel)
 	return &goFloat32Array{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }

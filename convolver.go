@@ -34,9 +34,7 @@ func (g *goConvolverNode) Buffer() AudioBuffer {
 		return nil
 	}
 	return &goAudioBuffer{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 

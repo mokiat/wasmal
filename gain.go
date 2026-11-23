@@ -18,8 +18,6 @@ type goGainNode struct {
 func (g *goGainNode) Gain() AudioParam {
 	jsValue := g.jsValue.Get("gain")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }

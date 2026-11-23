@@ -47,17 +47,13 @@ func (g *goOscillatorNode) SetType(oType OscillatorType) {
 func (g *goOscillatorNode) Frequency() AudioParam {
 	jsValue := g.jsValue.Get("frequency")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goOscillatorNode) Detune() AudioParam {
 	jsValue := g.jsValue.Get("detune")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
