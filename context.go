@@ -244,8 +244,91 @@ type goAudioContext struct {
 	goBaseAudioContext
 }
 
-func NewAudioContext() AudioContext {
-	jsValue := js.Global().Get("AudioContext").New()
+// AudioContextOptions as described here:
+// https://www.w3.org/TR/webaudio-1.1/#AudioContextOptions
+//
+// The zero value of each field leaves that option unspecified, in which
+// case the browser default is used.
+type AudioContextOptions struct {
+
+	// LatencyHint identifies the type of playback, which affects tradeoffs
+	// between audio output latency and power consumption. If unspecified,
+	// the browser uses AudioContextLatencyCategoryInteractive.
+	LatencyHint AudioContextLatencyHint
+
+	// SampleRate sets the sample rate of the AudioContext, in samples per
+	// second. If zero, the sample rate of the current output device is used.
+	SampleRate float32
+}
+
+// AudioContextLatencyCategory as described here:
+// https://www.w3.org/TR/webaudio-1.1/#enumdef-audiocontextlatencycategory
+type AudioContextLatencyCategory string
+
+const (
+	// AudioContextLatencyCategoryBalanced balances audio output latency and
+	// power consumption.
+	AudioContextLatencyCategoryBalanced AudioContextLatencyCategory = "balanced"
+
+	// AudioContextLatencyCategoryInteractive provides the lowest audio output
+	// latency possible without glitching.
+	AudioContextLatencyCategoryInteractive AudioContextLatencyCategory = "interactive"
+
+	// AudioContextLatencyCategoryPlayback prioritizes sustained playback
+	// without interruption over audio output latency, with the lowest power
+	// consumption.
+	AudioContextLatencyCategoryPlayback AudioContextLatencyCategory = "playback"
+)
+
+// AudioContextLatencyHint represents the latencyHint member of
+// AudioContextOptions, which is either an AudioContextLatencyCategory or a
+// preferred latency in seconds.
+//
+// The zero value leaves the latency hint unspecified. Use
+// LatencyHintCategory or LatencyHintSeconds to create one.
+type AudioContextLatencyHint struct {
+	category AudioContextLatencyCategory
+	seconds  float64
+	isSet    bool
+}
+
+// LatencyHintCategory returns an AudioContextLatencyHint that requests the
+// specified latency category.
+func LatencyHintCategory(category AudioContextLatencyCategory) AudioContextLatencyHint {
+	return AudioContextLatencyHint{
+		category: category,
+		isSet:    true,
+	}
+}
+
+// LatencyHintSeconds returns an AudioContextLatencyHint that requests the
+// specified latency in seconds. The browser may not honor it exactly.
+func LatencyHintSeconds(seconds float64) AudioContextLatencyHint {
+	return AudioContextLatencyHint{
+		seconds: seconds,
+		isSet:   true,
+	}
+}
+
+func (h AudioContextLatencyHint) jsValue() any {
+	if h.category != "" {
+		return string(h.category)
+	}
+	return h.seconds
+}
+
+// NewAudioContext creates a new AudioContext with the specified options.
+//
+// Pass a zero AudioContextOptions to use the browser defaults.
+func NewAudioContext(options AudioContextOptions) AudioContext {
+	jsOptions := make(map[string]any)
+	if options.LatencyHint.isSet {
+		jsOptions["latencyHint"] = options.LatencyHint.jsValue()
+	}
+	if options.SampleRate > 0 {
+		jsOptions["sampleRate"] = options.SampleRate
+	}
+	jsValue := js.Global().Get("AudioContext").New(jsOptions)
 	return &goAudioContext{
 		jsValue: jsValue,
 	}
