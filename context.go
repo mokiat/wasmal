@@ -193,16 +193,8 @@ func (g *goBaseAudioContext) CreateGain() GainNode {
 }
 
 func (g *goBaseAudioContext) CreateIIRFilter(feedforward, feedback []float64) IIRFilterNode {
-	jsFeedforward := js.Global().Get("Array").New(len(feedforward))
-	for i, s := range feedforward {
-		jsFeedforward.SetIndex(i, s)
-	}
-
-	jsFeedback := js.Global().Get("Array").New(len(feedback))
-	for i, s := range feedback {
-		jsFeedback.SetIndex(i, s)
-	}
-
+	jsFeedforward := newFloat64Array(feedforward)
+	jsFeedback := newFloat64Array(feedback)
 	jsValue := g.jsValue.Call("createIIRFilter", jsFeedforward, jsFeedback)
 	return &goIIRFilterNode{
 		jsValue: jsValue,

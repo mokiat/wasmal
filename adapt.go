@@ -66,6 +66,15 @@ type DataTypes interface {
 	~int8 | ~uint8 | ~int16 | ~uint16 | ~int32 | ~uint32 | ~float32 | ~float64
 }
 
+// newFloat64Array creates a new JavaScript Float64Array that holds
+// a copy of the specified data, transferred in a single bulk copy.
+func newFloat64Array(data []float64) js.Value {
+	jsArray := js.Global().Get("Float64Array").New(len(data))
+	uint8View := js.Global().Get("Uint8Array").New(jsArray.Get("buffer"))
+	js.CopyBytesToJS(uint8View, asByteSlice(data))
+	return jsArray
+}
+
 // asByteSlice returns a []byte representation for the
 // specified arbitrary slice type.
 //
