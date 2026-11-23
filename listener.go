@@ -40,6 +40,16 @@ type AudioListener interface {
 	// UpZ returns an AudioParam representing the z coordinate of the up
 	// orientation of the listener.
 	UpZ() AudioParam
+
+	// SetPosition sets the position of the listener in 3D space. It is
+	// equivalent to setting the values of PositionX, PositionY and PositionZ,
+	// but requires a single call.
+	SetPosition(x, y, z float32)
+
+	// SetOrientation sets the forward and up directions of the listener in 3D
+	// space. It is equivalent to setting the values of ForwardX, ForwardY,
+	// ForwardZ, UpX, UpY and UpZ, but requires a single call.
+	SetOrientation(x, y, z, xUp, yUp, zUp float32)
 }
 
 var _ AudioListener = (*goAudioListener)(nil)
@@ -109,4 +119,12 @@ func (g *goAudioListener) UpZ() AudioParam {
 	return &goAudioParam{
 		jsValue: jsValue,
 	}
+}
+
+func (g *goAudioListener) SetPosition(x, y, z float32) {
+	g.jsValue.Call("setPosition", x, y, z)
+}
+
+func (g *goAudioListener) SetOrientation(x, y, z, xUp, yUp, zUp float32) {
+	g.jsValue.Call("setOrientation", x, y, z, xUp, yUp, zUp)
 }

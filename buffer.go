@@ -19,6 +19,10 @@ type AudioBuffer interface {
 
 	// GetChannelData returns a Float32Array containing the PCM audio data associated with the specified channel.
 	GetChannelData(channel uint32) Float32Array
+
+	// CopyToChannel copies the samples from source into the specified channel
+	// of the buffer, starting at the sample-frame specified by bufferOffset.
+	CopyToChannel(source []float32, channel, bufferOffset uint32)
 }
 
 var _ AudioBuffer = (*goAudioBuffer)(nil)
@@ -48,4 +52,8 @@ func (g *goAudioBuffer) GetChannelData(channel uint32) Float32Array {
 	return &goFloat32Array{
 		jsValue: jsValue,
 	}
+}
+
+func (g *goAudioBuffer) CopyToChannel(source []float32, channel, bufferOffset uint32) {
+	g.jsValue.Call("copyToChannel", newFloat32Array(source), channel, bufferOffset)
 }

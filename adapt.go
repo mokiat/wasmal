@@ -66,10 +66,23 @@ type DataTypes interface {
 	~int8 | ~uint8 | ~int16 | ~uint16 | ~int32 | ~uint32 | ~float32 | ~float64
 }
 
+// newFloat32Array creates a new JavaScript Float32Array that holds
+// a copy of the specified data, transferred in a single bulk copy.
+func newFloat32Array(data []float32) js.Value {
+	return newTypedArray("Float32Array", data)
+}
+
 // newFloat64Array creates a new JavaScript Float64Array that holds
 // a copy of the specified data, transferred in a single bulk copy.
 func newFloat64Array(data []float64) js.Value {
-	jsArray := js.Global().Get("Float64Array").New(len(data))
+	return newTypedArray("Float64Array", data)
+}
+
+// newTypedArray creates a new instance of the specified JavaScript typed
+// array constructor and copies data into it in a single bulk copy. The
+// constructor must have an element type that matches T.
+func newTypedArray[T DataTypes](constructor string, data []T) js.Value {
+	jsArray := js.Global().Get(constructor).New(len(data))
 	uint8View := js.Global().Get("Uint8Array").New(jsArray.Get("buffer"))
 	js.CopyBytesToJS(uint8View, asByteSlice(data))
 	return jsArray

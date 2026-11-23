@@ -36,6 +36,16 @@ type PannerNode interface {
 	// audio source in 3D space.
 	OrientationZ() AudioParam
 
+	// SetPosition sets the position of the audio source in 3D space. It is
+	// equivalent to setting the values of PositionX, PositionY and PositionZ,
+	// but requires a single call.
+	SetPosition(x, y, z float32)
+
+	// SetOrientation sets the direction in which the audio source is pointing
+	// in 3D space. It is equivalent to setting the values of OrientationX,
+	// OrientationY and OrientationZ, but requires a single call.
+	SetOrientation(x, y, z float32)
+
 	// DistanceModel returns the current distance model used by the PannerNode.
 	DistanceModel() DistanceModelType
 
@@ -174,6 +184,14 @@ func (g *goPannerNode) OrientationZ() AudioParam {
 	return &goAudioParam{
 		jsValue: jsValue,
 	}
+}
+
+func (g *goPannerNode) SetPosition(x, y, z float32) {
+	g.jsValue.Call("setPosition", x, y, z)
+}
+
+func (g *goPannerNode) SetOrientation(x, y, z float32) {
+	g.jsValue.Call("setOrientation", x, y, z)
 }
 
 func (g *goPannerNode) DistanceModel() DistanceModelType {

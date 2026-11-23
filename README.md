@@ -24,7 +24,9 @@ go get github.com/mokiat/wasmal@latest
 Create an `AudioContext`, build a node graph, and connect it to the destination:
 
 ```go
-ctx := wasmal.NewAudioContext()
+ctx := wasmal.NewAudioContext(wasmal.AudioContextOptions{
+	LatencyHint: wasmal.LatencyHintCategory(wasmal.AudioContextLatencyCategoryInteractive),
+})
 
 osc := ctx.CreateOscillator()
 osc.Frequency().SetValue(440) // A4
@@ -50,7 +52,7 @@ defer cleanup()
 
 | Interface | Factory |
 |-----------|---------|
-| `AudioContext` / `BaseAudioContext` | `NewAudioContext()` |
+| `AudioContext` / `BaseAudioContext` | `NewAudioContext(options)` |
 | `AudioDestinationNode` | `ctx.Destination()` |
 | `AudioBufferSourceNode` | `ctx.CreateBufferSource()` |
 | `OscillatorNode` | `ctx.CreateOscillator()` |
