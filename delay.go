@@ -18,8 +18,6 @@ type goDelayNode struct {
 func (g *goDelayNode) DelayTime() AudioParam {
 	jsValue := g.jsValue.Get("delayTime")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }

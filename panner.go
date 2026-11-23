@@ -137,54 +137,42 @@ func (g *goPannerNode) SetPanningModel(model PanningModelType) {
 func (g *goPannerNode) PositionX() AudioParam {
 	jsValue := g.jsValue.Get("positionX")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goPannerNode) PositionY() AudioParam {
 	jsValue := g.jsValue.Get("positionY")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goPannerNode) PositionZ() AudioParam {
 	jsValue := g.jsValue.Get("positionZ")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goPannerNode) OrientationX() AudioParam {
 	jsValue := g.jsValue.Get("orientationX")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goPannerNode) OrientationY() AudioParam {
 	jsValue := g.jsValue.Get("orientationY")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goPannerNode) OrientationZ() AudioParam {
 	jsValue := g.jsValue.Get("orientationZ")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
@@ -253,8 +241,6 @@ type goStereoPannerNode struct {
 func (g *goStereoPannerNode) Pan() AudioParam {
 	jsValue := g.jsValue.Get("pan")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }

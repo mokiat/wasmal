@@ -120,11 +120,7 @@ type goBaseAudioContext struct {
 func (g *goBaseAudioContext) Destination() AudioDestinationNode {
 	jsValue := g.jsValue.Get("destination")
 	return &goAudioDestinationNode{
-		goAudioNode: goAudioNode{
-			goObject: goObject{
-				jsValue: jsValue,
-			},
-		},
+		jsValue: jsValue,
 	}
 }
 
@@ -139,9 +135,7 @@ func (g *goBaseAudioContext) CurrentTime() float64 {
 func (g *goBaseAudioContext) Listener() AudioListener {
 	jsValue := g.jsValue.Get("listener")
 	return &goAudioListener{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
@@ -152,133 +146,79 @@ func (g *goBaseAudioContext) State() AudioContextState {
 func (g *goBaseAudioContext) CreateBiquadFilter() BiquadFilterNode {
 	jsValue := g.jsValue.Call("createBiquadFilter")
 	return &goBiquadFilterNode{
-		goAudioNode: goAudioNode{
-			goObject: goObject{
-				jsValue: jsValue,
-			},
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goBaseAudioContext) CreateBuffer(numChannels, length uint32, sampleRate float32) AudioBuffer {
 	jsValue := g.jsValue.Call("createBuffer", numChannels, length, sampleRate)
 	return &goAudioBuffer{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goBaseAudioContext) CreateBufferSource() AudioBufferSourceNode {
 	jsValue := g.jsValue.Call("createBufferSource")
 	return &goAudioBufferSourceNode{
-		goAudioScheduledSourceNode: goAudioScheduledSourceNode{
-			goAudioNode: goAudioNode{
-				goObject: goObject{
-					jsValue: jsValue,
-				},
-			},
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goBaseAudioContext) CreateConvolver() ConvolverNode {
 	jsValue := g.jsValue.Call("createConvolver")
 	return &goConvolverNode{
-		goAudioNode: goAudioNode{
-			goObject: goObject{
-				jsValue: jsValue,
-			},
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goBaseAudioContext) CreateDelay(maxDelayTime float64) DelayNode {
 	jsValue := g.jsValue.Call("createDelay", maxDelayTime)
 	return &goDelayNode{
-		goAudioNode: goAudioNode{
-			goObject: goObject{
-				jsValue: jsValue,
-			},
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goBaseAudioContext) CreateDynamicsCompressor() DynamicsCompressorNode {
 	jsValue := g.jsValue.Call("createDynamicsCompressor")
 	return &goDynamicsCompressorNode{
-		goAudioNode: goAudioNode{
-			goObject: goObject{
-				jsValue: jsValue,
-			},
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goBaseAudioContext) CreateGain() GainNode {
 	jsValue := g.jsValue.Call("createGain")
 	return &goGainNode{
-		goAudioNode: goAudioNode{
-			goObject: goObject{
-				jsValue: jsValue,
-			},
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goBaseAudioContext) CreateIIRFilter(feedforward, feedback []float64) IIRFilterNode {
-	jsFeedforward := js.Global().Get("Array").New(len(feedforward))
-	for i, s := range feedforward {
-		jsFeedforward.SetIndex(i, s)
-	}
-
-	jsFeedback := js.Global().Get("Array").New(len(feedback))
-	for i, s := range feedback {
-		jsFeedback.SetIndex(i, s)
-	}
-
+	jsFeedforward := newFloat64Array(feedforward)
+	jsFeedback := newFloat64Array(feedback)
 	jsValue := g.jsValue.Call("createIIRFilter", jsFeedforward, jsFeedback)
 	return &goIIRFilterNode{
-		goAudioNode: goAudioNode{
-			goObject: goObject{
-				jsValue: jsValue,
-			},
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goBaseAudioContext) CreateOscillator() OscillatorNode {
 	jsValue := g.jsValue.Call("createOscillator")
 	return &goOscillatorNode{
-		goAudioScheduledSourceNode: goAudioScheduledSourceNode{
-			goAudioNode: goAudioNode{
-				goObject: goObject{
-					jsValue: jsValue,
-				},
-			},
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goBaseAudioContext) CreatePanner() PannerNode {
 	jsValue := g.jsValue.Call("createPanner")
 	return &goPannerNode{
-		goAudioNode: goAudioNode{
-			goObject: goObject{
-				jsValue: jsValue,
-			},
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goBaseAudioContext) CreateStereoPanner() StereoPannerNode {
 	jsValue := g.jsValue.Call("createStereoPanner")
 	return &goStereoPannerNode{
-		goAudioNode: goAudioNode{
-			goObject: goObject{
-				jsValue: jsValue,
-			},
-		},
+		jsValue: jsValue,
 	}
 }
 
@@ -289,14 +229,10 @@ func (g *goBaseAudioContext) DecodeAudioData(data []byte) Promise[AudioBuffer] {
 
 	jsPromise := g.jsValue.Call("decodeAudioData", arrayBuffer)
 	return &goPromise[AudioBuffer]{
-		goObject: goObject{
-			jsValue: jsPromise,
-		},
+		jsValue: jsPromise,
 		convert: func(value js.Value) AudioBuffer {
 			return &goAudioBuffer{
-				goObject: goObject{
-					jsValue: value,
-				},
+				jsValue: value,
 			}
 		},
 	}
@@ -311,11 +247,7 @@ type goAudioContext struct {
 func NewAudioContext() AudioContext {
 	jsValue := js.Global().Get("AudioContext").New()
 	return &goAudioContext{
-		goBaseAudioContext: goBaseAudioContext{
-			goObject: goObject{
-				jsValue: jsValue,
-			},
-		},
+		jsValue: jsValue,
 	}
 }
 
@@ -330,9 +262,7 @@ func (g *goAudioContext) OutputLatency() float64 {
 func (g *goAudioContext) Close() Promise[struct{}] {
 	jsPromise := g.jsValue.Call("close")
 	return &goPromise[struct{}]{
-		goObject: goObject{
-			jsValue: jsPromise,
-		},
+		jsValue: jsPromise,
 		convert: func(value js.Value) struct{} {
 			return struct{}{}
 		},
@@ -342,9 +272,7 @@ func (g *goAudioContext) Close() Promise[struct{}] {
 func (g *goAudioContext) Resume() Promise[struct{}] {
 	jsPromise := g.jsValue.Call("resume")
 	return &goPromise[struct{}]{
-		goObject: goObject{
-			jsValue: jsPromise,
-		},
+		jsValue: jsPromise,
 		convert: func(value js.Value) struct{} {
 			return struct{}{}
 		},
@@ -354,9 +282,7 @@ func (g *goAudioContext) Resume() Promise[struct{}] {
 func (g *goAudioContext) Suspend() Promise[struct{}] {
 	jsPromise := g.jsValue.Call("suspend")
 	return &goPromise[struct{}]{
-		goObject: goObject{
-			jsValue: jsPromise,
-		},
+		jsValue: jsPromise,
 		convert: func(value js.Value) struct{} {
 			return struct{}{}
 		},

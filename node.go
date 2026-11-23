@@ -39,9 +39,7 @@ type goAudioNode struct {
 func (g *goAudioNode) Context() BaseAudioContext {
 	jsValue := g.jsValue.Get("context")
 	return &goBaseAudioContext{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 

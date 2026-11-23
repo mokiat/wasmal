@@ -116,9 +116,7 @@ func (g *goAudioBufferSourceNode) Buffer() AudioBuffer {
 		return nil
 	}
 	return &goAudioBuffer{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
@@ -129,18 +127,14 @@ func (g *goAudioBufferSourceNode) SetBuffer(buffer AudioBuffer) {
 func (g *goAudioBufferSourceNode) PlaybackRate() AudioParam {
 	jsValue := g.jsValue.Get("playbackRate")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goAudioBufferSourceNode) Detune() AudioParam {
 	jsValue := g.jsValue.Get("detune")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 

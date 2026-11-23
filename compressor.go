@@ -37,27 +37,21 @@ type goDynamicsCompressorNode struct {
 func (g *goDynamicsCompressorNode) Threshold() AudioParam {
 	jsValue := g.jsValue.Get("threshold")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goDynamicsCompressorNode) Knee() AudioParam {
 	jsValue := g.jsValue.Get("knee")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goDynamicsCompressorNode) Ratio() AudioParam {
 	jsValue := g.jsValue.Get("ratio")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
@@ -68,17 +62,13 @@ func (g *goDynamicsCompressorNode) Reduction() float32 {
 func (g *goDynamicsCompressorNode) Attack() AudioParam {
 	jsValue := g.jsValue.Get("attack")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }
 
 func (g *goDynamicsCompressorNode) Release() AudioParam {
 	jsValue := g.jsValue.Get("release")
 	return &goAudioParam{
-		goObject: goObject{
-			jsValue: jsValue,
-		},
+		jsValue: jsValue,
 	}
 }

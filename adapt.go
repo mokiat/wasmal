@@ -66,6 +66,15 @@ type DataTypes interface {
 	~int8 | ~uint8 | ~int16 | ~uint16 | ~int32 | ~uint32 | ~float32 | ~float64
 }
 
+// newFloat64Array creates a new JavaScript Float64Array that holds
+// a copy of the specified data, transferred in a single bulk copy.
+func newFloat64Array(data []float64) js.Value {
+	jsArray := js.Global().Get("Float64Array").New(len(data))
+	uint8View := js.Global().Get("Uint8Array").New(jsArray.Get("buffer"))
+	js.CopyBytesToJS(uint8View, asByteSlice(data))
+	return jsArray
+}
+
 // asByteSlice returns a []byte representation for the
 // specified arbitrary slice type.
 //
@@ -73,19 +82,13 @@ type DataTypes interface {
 // https://github.com/golang/go/issues/32402
 // https://github.com/golang/go/issues/31980
 func asByteSlice[T DataTypes](data []T) []byte {
-	if len(data) == 0 {
-		return nil
-	}
-	dataSize := byteSize(data)
-	return unsafe.Slice((*byte)(unsafe.Pointer(&data[0])), dataSize)
+	return unsafe.Slice((*byte)(unsafe.Pointer(unsafe.SliceData(data))), byteSize(data))
 }
 
 // byteSize returns the number of bytes that would be
 // needed to represent data once it is converted to a
 // byte slice through asByteSlice.
 func byteSize[T DataTypes](data []T) int {
-	if len(data) == 0 {
-		return 0
-	}
-	return len(data) * int(unsafe.Sizeof(data[0]))
+	var zero T
+	return len(data) * int(unsafe.Sizeof(zero))
 }
